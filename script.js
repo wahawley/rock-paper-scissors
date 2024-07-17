@@ -1,3 +1,8 @@
+let bodySelector = document.querySelector("body");
+let humanScore=0;
+let computerScore=0;
+let buttons = document.createElement("div");
+
 function getComputerChoice() {
     randNum=Math.random();
     if(randNum<=.33) {
@@ -11,59 +16,86 @@ function getComputerChoice() {
     }
 }
 
-function getHumanChoice() {
-    input=prompt("Please enter rock paper or scissors.");
-    return input.toLowerCase();
+function selectionButtons() {
+
+    let rButton = document.createElement("button");
+    let pButton = document.createElement("button");
+    let sButton = document.createElement("button");
+
+    rButton.textContent = "rock";
+    pButton.textContent = "paper";
+    sButton.textContent = "scissors";
+
+    buttons.appendChild(rButton);
+    buttons.appendChild(pButton);
+    buttons.appendChild(sButton);
+
+    bodySelector.appendChild(buttons);
+
+    buttons.addEventListener("click", playRound);
+
 }
 
+function playRound(hChoice) {
+    let finalResults=document.createElement("p");
 
-function playGame() {
-    let humanScore=0;
-    let computerScore=0;
-
-    function playRound() {
-        let humanSelection=getHumanChoice();
+    if (humanScore<5 && computerScore<5) {
+        let humanSelection=hChoice.target.textContent;
         let computerSelection=getComputerChoice();
         let combinedSelection=humanSelection+computerSelection;
+        let results=document.createElement("div");
+        let choices=document.createElement("p");
+        let wld=document.createElement("p");
 
-        console.log("You've chosen " + humanSelection.toLowerCase() + ". The computer has chosen " + computerSelection + ".");
-    
+        choices.textContent="You've chosen " + humanSelection.toLowerCase() + ". The computer has chosen " + computerSelection + ".";
+
         if(combinedSelection==="rockrock"||combinedSelection==="paperpaper"||combinedSelection==="scissorsscissors") {
-            console.log("\nDraw! Please try again.");
+            wld.textContent="\nDraw! Please try again. The score is "+humanScore+" to "+computerScore+".";
         }
 
         if(combinedSelection==="rockpaper"|| combinedSelection==="scissorsrock"||combinedSelection==="paperscissors") {
-            console.log("\nYou lose! "+computerSelection.at(0).toUpperCase()+computerSelection.slice(1)+" beats "+humanSelection.toLowerCase()+".");
             computerScore++;
+            wld.textContent="\nYou lose! "+computerSelection.at(0).toUpperCase()+computerSelection.slice(1)+" beats "+humanSelection.toLowerCase()+". The score is "+humanScore+" to "+computerScore+".";
+            
         }
 
         if(combinedSelection==="paperrock"||combinedSelection==="rockscissors"||combinedSelection==="scissorspaper") {
-            console.log("\nYou win! "+humanSelection.at(0).toUpperCase()+humanSelection.slice(1).toLowerCase()+" beats "+computerSelection+".");
             humanScore++;
+            wld.textContent="\nYou win! "+humanSelection.at(0).toUpperCase()+humanSelection.slice(1).toLowerCase()+" beats "+computerSelection+". The score is "+humanScore+" to "+computerScore+".";
+            
         }
+
+        results.appendChild(choices);
+        results.appendChild(wld);
+        bodySelector.appendChild(results);
     }
-
-        playRound();
-        playRound();
-        playRound();
-        playRound();
-        playRound();
-
+    else {
+        buttons.removeEventListener("click", playRound);
         if(humanScore>computerScore) {
-            console.log("You win!  The final score was "+humanScore+" to "+computerScore+".");
+            finalResults.textContent="You win!  The final score was "+humanScore+" to "+computerScore+".";
+            bodySelector.appendChild(finalResults);
         }
+    
         else if(humanScore<computerScore) {
-            console.log("You lose!  The final score was "+humanScore+" to "+computerScore+".");
+            finalResults.textContent="You lose!  The final score was "+humanScore+" to "+computerScore+".";
+            bodySelector.appendChild(finalResults);
         }
+        
         else {
-            console.log("Draw, please play again!  The final score was "+humanScore+" to "+computerScore+".");
-        }
+            finalResults.textContent="Draw, please play again!  The final score was "+humanScore+" to "+computerScore+".";
+            bodySelector.appendChild(finalResults);
+        } 
+    }  
 }
 
-//getComputerChoice Test
-//console.log(getComputerChoice());
+function playGame() {
 
-//getHumanChoice Test
-//console.log(getHumanChoice());
+    let finalResults=document.createElement("p");
+
+    selectionButtons();
+
+    bodySelector.appendChild(finalResults);
+
+}
 
 playGame();
